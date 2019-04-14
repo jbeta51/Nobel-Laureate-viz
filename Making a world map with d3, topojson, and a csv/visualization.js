@@ -80,19 +80,17 @@
 			Get the x/y from the lat/long + projection
 			Convert lat and lng into something usable with x and y
 		*/
-		console.log(laureates_data)
+		// console.log(laureates_data)
 		svg.selectAll(".city-circle")
 			.data(laureates_data)
 			.enter().append("circle")
 			.attr("r", 2)
 			.attr("cx", function(d) {
 				var coords = projection([d.lng, d.lat]) // use a projection to translate from a globe to flat screen w lng and lat
-				console.log(coords)
 				return coords[0];
 			})
 			.attr("cy", function(d) {
 				var coords = projection([d.lng, d.lat]) // use a projection to translate from a globe to flat screen w lng and lat
-				console.log(coords)
 				return coords[1];
 			})
 
