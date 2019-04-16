@@ -84,7 +84,9 @@
 		svg.selectAll(".city-circle")
 			.data(laureates_data)
 			.enter().append("circle")
-			.attr("r", 2)
+			.attr("r", function(d) {
+				return d.gender == "female" ? 5 : 2 
+			})
 			.attr("cx", function(d) {
 				var coords = projection([d.lng, d.lat]) // use a projection to translate from a globe to flat screen w lng and lat
 				return coords[0];
@@ -93,6 +95,25 @@
 				var coords = projection([d.lng, d.lat]) // use a projection to translate from a globe to flat screen w lng and lat
 				return coords[1];
 			})
+			.attr("fill", function(d) {
+				switch(d.category) {
+					case "peace":
+					  return "red";
+					case "economics":
+					  return "blue";
+					case "chemistry":
+					  return "yellow";
+					case "literature":
+					  return "green";
+					case "physics":
+					  return "purple";
+					case "medicine":
+					  return "teal";
+					default:
+					  console.log(d.category);
+					  return "black";
+				  }
+			});
 
 		// svg.selectAll(".city-label")
 		// 	.data(laureates_data)
