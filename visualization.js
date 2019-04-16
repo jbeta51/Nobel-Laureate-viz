@@ -10,6 +10,10 @@
 		.attr("style", "outline: thin solid red;")
 		.append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	var div = d3.select("body").append("div")	
+		.attr("class", "tooltip")				
+		.style("opacity", 0);
 	/*
 		Queue up what we are going to import:
 		Read in world.topojson -- topojson is a fancier/nicer form of geojson file format
@@ -85,7 +89,7 @@
 			.data(laureates_data)
 			.enter().append("circle")
 			.attr("r", function(d) {
-				return d.gender == "female" ? 5 : 2 
+				return d.gender == "female" ? 6 : 2 
 			})
 			.attr("cx", function(d) {
 				var coords = projection([d.lng, d.lat]) // use a projection to translate from a globe to flat screen w lng and lat
@@ -95,6 +99,8 @@
 				var coords = projection([d.lng, d.lat]) // use a projection to translate from a globe to flat screen w lng and lat
 				return coords[1];
 			})
+			.attr("stroke", "black")
+			.attr("stroke-width", "1px")
 			.attr("fill", function(d) {
 				switch(d.category) {
 					case "peace":
@@ -113,6 +119,22 @@
 					  console.log(d.category);
 					  return "black";
 				  }
+			});
+			females = svg.selectAll("circle").filter(function(d) {return d.gender == "female";});
+
+			females.on("mouseover", function(d) {		
+				div.transition()		
+					.duration(200)		
+					.style("opacity", .9);		
+				div	.html("<h1>" + (d.fullname) + "</h1> <br/>" +
+						  "<span style='color:red'>" + (d.category) + "</span>")	
+					.style("left", (d3.event.pageX) + "px")		
+					.style("top", (d3.event.pageY - 28) + "px");	
+			})
+			.on("mouseout", function(d) {		
+				div.transition()		
+					.duration(500)		
+					.style("opacity", 0);	
 			});
 
 		// svg.selectAll(".city-label")
