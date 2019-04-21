@@ -1,7 +1,8 @@
 // Global Variables for time slider
-var inputValue = null; // holds the input value from the time slider
-var year = ["1901","1902","1903","1904","1905","1906","1907","1908","1909","1910","1911","1912","1913","1914","1915","1916","1917","1918","1919","1920","1921","1922","1923","1924","1925","1926","1927","1928","1929","1930","1931","1932","1933","1934","1935","1936","1937","1938","1939","1943","1944","1945","1946","1947","1948","1949","1950","1951","1952","1953","1954","1955","1956","1957","1958","1959","1960","1961","1962","1963","1964","1965","1966","1967","1968","1969","1970","1971","1972","1973","1974","1975","1976","1977","1978","1979","1980","1981","1982","1983","1984","1985","1986","1987","1988","1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015"];
 // represents what the slider values mean
+var year = ["1901","1902","1903","1904","1905","1906","1907","1908","1909","1910","1911","1912","1913","1914","1915","1916","1917","1918","1919","1920","1921","1922","1923","1924","1925","1926","1927","1928","1929","1930","1931","1932","1933","1934","1935","1936","1937","1938","1939","1943","1944","1945","1946","1947","1948","1949","1950","1951","1952","1953","1954","1955","1956","1957","1958","1959","1960","1961","1962","1963","1964","1965","1966","1967","1968","1969","1970","1971","1972","1973","1974","1975","1976","1977","1978","1979","1980","1981","1982","1983","1984","1985","1986","1987","1988","1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015"];
+var inputValue = year[0]; // holds the input value from the time slider, init to 1901
+
 
 (function() {
 	var margin = { top: 50, left: 50, right: 50, bottom: 50 },
@@ -9,7 +10,6 @@ var year = ["1901","1902","1903","1904","1905","1906","1907","1908","1909","1910
 			width = 1600 - margin.left - margin.right;
 
 	var svg = d3.select("#map")
-		// .append(sliderContainer)
 		.append("svg")
 		.attr("height", height + margin.top + margin.bottom)
 		.attr("width", width + margin.left + margin.right)
@@ -96,8 +96,11 @@ var year = ["1901","1902","1903","1904","1905","1906","1907","1908","1909","1910
 			.data(laureates_data)
 			.enter().append("circle")
 			.attr("r", function(d) {
-				//if ()
-				return d.gender == "female" ? 6 : 1 
+				if (d.year == 1901) {
+					return d.gender == "female" ? 6 : 1 ;
+				} else {
+					return 0;
+				}
 			})
 			.attr("cx", function(d) {
 				var coords = projection([d.lng, d.lat]) // use a projection to translate from a globe to flat screen w lng and lat
@@ -124,7 +127,7 @@ var year = ["1901","1902","1903","1904","1905","1906","1907","1908","1909","1910
 					case "medicine":
 					  return "teal";
 					default:
-					  console.log(d.category);
+					  // console.log(d.category);
 					  return "black";
 				  }
 			});
@@ -153,7 +156,7 @@ var year = ["1901","1902","1903","1904","1905","1906","1907","1908","1909","1910
 
 		// d3.selectAll(".city-label")
 
-			    // when the input range changes update the rectangle 
+		// when the input range changes update the rectangle 
     	d3.select("#timeslide").on("input", function() {
         	update(+this.value);
     	});
@@ -162,30 +165,14 @@ var year = ["1901","1902","1903","1904","1905","1906","1907","1908","1909","1910
 	        document.getElementById("range").innerHTML=year[value];
 	        inputValue = year[value];
 	        console.log(inputValue);
-	        // d3.selectAll("incident")
-	        //     .style("fill", "timeMatch");
-    	}
-
-  //   	function timeMatch(data, value) {
-  //   		var d = new Date(data.properties.OPEN_DT);
-  //   		var y = year[d.getYear()];
-  //   		if (inputValue == y) {
-  //   			this.parentElement.appendChild(this);
-  //   			return "black";m
-  //   		} else {
-  //   			return "#999";
-  //   		};
-		// }
-
-		// function initialDate(y, i) {
-		//     var d = new Date(d.properties.OPEN_DT);
-		//     var y = year[d.getYear()];
-		//     if (y == "1901") {
-		//         this.parentElement.appendChild(this);
-		//         return "";
-		//     } else {
-		//         return "#999";
-	 //    	};
-		// }
+	        svg.selectAll("circle")
+				.attr("r", function(d) {
+					if (d.year <= inputValue) {
+						return d.gender == "female" ? 6 : 1 ;
+					} else {
+						return 0;
+					}
+				})
+		}	
 	}
 })();

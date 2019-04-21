@@ -20,4 +20,8 @@ h2 {
 #sliderContainer {
     text-align: center;
     position: relative;
-    top: px;
+    top: 600px;
+    /* width: 100%;*/
+}
+
+
