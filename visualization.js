@@ -125,9 +125,15 @@
 			females.on("mouseover", function(d) {		
 				div.transition()		
 					.duration(200)		
-					.style("opacity", .9);		
+					.style("opacity", .9);
+				//  img path
+
+				var imgPath = "res/imgs/" + (d.firstname).split(" ")[0] + ".jpg";	
+				console.log(imgPath);
 				div	.html("<h1>" + (d.fullname) + "</h1> <br/>" +
-						  "<span style='color:red'>" + (d.category) + "</span>")	
+						  "<img width='128' src=" + imgPath + " /img> <br/>" +
+						  "<span style='color:red'>" + (d.category) + "</span>")
+
 					.style("left", (d3.event.pageX) + "px")		
 					.style("top", (d3.event.pageY - 28) + "px");	
 			})
