@@ -1,3 +1,9 @@
+// Global Variables for time slider
+// represents what the slider values mean
+var year = ["1901","1902","1903","1904","1905","1906","1907","1908","1909","1910","1911","1912","1913","1914","1915","1916","1917","1918","1919","1920","1921","1922","1923","1924","1925","1926","1927","1928","1929","1930","1931","1932","1933","1934","1935","1936","1937","1938","1939","1943","1944","1945","1946","1947","1948","1949","1950","1951","1952","1953","1954","1955","1956","1957","1958","1959","1960","1961","1962","1963","1964","1965","1966","1967","1968","1969","1970","1971","1972","1973","1974","1975","1976","1977","1978","1979","1980","1981","1982","1983","1984","1985","1986","1987","1988","1989","1990","1991","1992","1993","1994","1995","1996","1997","1998","1999","2000","2001","2002","2003","2004","2005","2006","2007","2008","2009","2010","2011","2012","2013","2014","2015"];
+var inputValue = year[0]; // holds the input value from the time slider, init to 1901
+
+
 (function() {
 	var margin = { top: 50, left: 50, right: 50, bottom: 50 },
 			height = 800 - margin.top - margin.bottom,
@@ -10,6 +16,11 @@
 		.attr("style", "outline: thin solid red;")
 		.append("g")
 		.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+	var div = d3.select("body").append("div")	
+		.attr("class", "tooltip")				
+		.style("opacity", 0);
 	/*
 		Queue up what we are going to import:
 		Read in world.topojson -- topojson is a fancier/nicer form of geojson file format
@@ -85,7 +96,11 @@
 			.data(laureates_data)
 			.enter().append("circle")
 			.attr("r", function(d) {
-				return d.gender == "female" ? 5 : 2 
+				if (d.year == 1901) {
+					return d.gender == "female" ? 6 : 1 ;
+				} else {
+					return 0;
+				}
 			})
 			.attr("cx", function(d) {
 				var coords = projection([d.lng, d.lat]) // use a projection to translate from a globe to flat screen w lng and lat
@@ -95,6 +110,8 @@
 				var coords = projection([d.lng, d.lat]) // use a projection to translate from a globe to flat screen w lng and lat
 				return coords[1];
 			})
+			.attr("stroke", "black")
+			.attr("stroke-width", "1px")
 			.attr("fill", function(d) {
 				switch(d.category) {
 					case "peace":
@@ -110,27 +127,52 @@
 					case "medicine":
 					  return "teal";
 					default:
-					  console.log(d.category);
+					  // console.log(d.category);
 					  return "black";
 				  }
 			});
+			females = svg.selectAll("circle").filter(function(d) {return d.gender == "female";});
 
-		// svg.selectAll(".city-label")
-		// 	.data(laureates_data)
-		// 	.enter().append("text")
-		// 	.attr("class", "city-label")
-		// 	.attr("x", function(d) {
-		// 		var coords = projection([d.lng, d.lat]) // use a projection to translate from a globe to flat screen w lng and lat
-		// 		console.log(coords)
-		// 		return coords[0];
-		// 	})
-		// 	.attr("y", function(d) {
-		// 		var coords = projection([d.lng, d.lat]) // use a projection to translate from a globe to flat screen w lng and lat
-		// 		console.log(coords)
-		// 		return coords[1];
-		// 	})
-		// 	.text(function(d) {
-		// 		return d.name;
-		// 	})
+			females.on("mouseover", function(d) {		
+				div.transition()		
+					.duration(200)		
+					.style("opacity", .9);
+				//  img path
+
+				var imgPath = "res/imgs/" + (d.firstname).split(" ")[0] + ".jpg";	
+				console.log(imgPath);
+				div	.html("<h1>" + (d.fullname) + "</h1> <br/>" +
+						  "<img width='128' src=" + imgPath + " /img> <br/>" +
+						  "<span style='color:red'>" + (d.category) + "</span>")
+
+					.style("left", (d3.event.pageX) + "px")		
+					.style("top", (d3.event.pageY - 28) + "px");	
+			})
+			.on("mouseout", function(d) {		
+				div.transition()		
+					.duration(500)		
+					.style("opacity", 0);	
+			});
+
+		// d3.selectAll(".city-label")
+
+		// when the input range changes update the rectangle 
+    	d3.select("#timeslide").on("input", function() {
+        	update(+this.value);
+    	});
+
+	    function update(value) {
+	        document.getElementById("range").innerHTML=year[value];
+	        inputValue = year[value];
+	        console.log(inputValue);
+	        svg.selectAll("circle")
+				.attr("r", function(d) {
+					if (d.year <= inputValue) {
+						return d.gender == "female" ? 6 : 1 ;
+					} else {
+						return 0;
+					}
+				})
+		}	
 	}
 })();
