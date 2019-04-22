@@ -1,11 +1,20 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<title>Female Nobel Laureates Over Time</title>
 		<meta charset="utf-8">
+			<h1>Female Nobel Laureates Over Time</h1>
 			<div id="sliderContainer">
 			   	<input id="timeslide" type="range" min="0" max="111" value="0" step="1"/><br>
 			    <span id="range">1901</span>
 			</div>
+			<div id = "femaleFieldContainer">
+			    <h3>Number of Female Nobel Laureates: <input type="text" id="myText" value="" onchange="changeFemaleField()"> </h3>
+		    </div>
+			<div id = "maleFieldContainer">
+			    <h3>Number of Male Nobel Laureates: <span id="maleCount" value = "maleCount" onchange = "changeMaleCount()"></span><br/> </h3>
+		    </div>
+
 		<style>
 			*{
 				font-family: "Helvetica Neue";
