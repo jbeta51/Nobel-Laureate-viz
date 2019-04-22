@@ -142,7 +142,7 @@ var inputValue = year[0]; // holds the input value from the time slider, init to
 				var imgPath = "res/imgs/" + (d.firstname).split(" ")[0] + ".jpg";	
 				console.log(imgPath);
 				div	.html("<h1>" + (d.fullname) + "</h1> <br/>" +
-						  "<img width='128' src=" + imgPath + " /img> <br/>" +
+						  "<img width='128' style='opacity:1' src=" + imgPath + " /img> <br/>" +
 						  "<span style='color:red'>" + (d.category) + "</span>")
 
 					.style("left", (d3.event.pageX) + "px")		
